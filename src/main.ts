@@ -1,66 +1,39 @@
-import { device } from "@shared/device";
-import { column, render, type Node } from "@busy-app/busy-lib";
+import {device} from "@shared/device";
+import {surface,label,panel,rect,wrap,mint,amber,read,persist,report,type Frame,type Key} from "@shared/surface";
 import manifest from "./appmeta/manifest.json";
 
-/** The name the app draws under; the device clears elements by this id. */
-const APP = manifest.id;
-
-/** How often the screen is redrawn. */
-const TICK_MS = 1000;
-
-const WHITE = "#FFFFFFFF";
-const SUBTLE_WHITE = "#FFFFFF80";
-
-/**
- * The frame drawn on every tick. The screen is 72×16, so two short lines are about all that fits.
- */
-function frame(ticks: number): Node {
-  return column({ justify: "center", align: "center" }, [
-    { type: "text", id: "title", text: "Hello", font: "bold", color: WHITE },
-    {
-      type: "text",
-      id: "ticks",
-      text: String(ticks),
-      font: "small",
-      color: SUBTLE_WHITE,
-    },
-  ]);
+const intervals=["Major 3rd","Perfect 4th","Perfect 5th","Octave"];
+let question=Math.floor(Math.random()*4), choice=0, answered=false, playing=false, stopped=false;
+let message="Start: hear the pair";
+let stats=read("scores",{right:0,total:0,streak:0,best:0});
+function draw():Frame{
+ const color=answered?(choice===question?mint:amber):"#ABB8FFFF";
+ return [rect("line",0,14,Math.round((choice+1)*18),2,color),
+ label("pick",answered?(choice===question?"Correct!":"Hear again"):intervals[choice],1,0,color),
+ ...panel("EARBITS",["Identify the interval",answered?"Answer: "+intervals[question]:message,
+ "Pick: "+intervals[choice],"Score "+stats.right+"/"+stats.total+"   Best "+stats.best,
+ "Start: replay the notes",answered?"Click: next question":"Wheel: choose / click: grade"])];
 }
-
-/** Sends one frame to the device. */
-async function draw(ticks: number): Promise<void> {
-  const elements = render(frame(ticks));
-  await device.DisplayDraw({ application_name: APP, priority: 50, elements });
+async function play(){
+ if(playing||stopped)return;
+ playing=true;
+ try{
+   await device.AudioPlay({application_name:manifest.id,path:"sounds/pair"+question+".snd"});
+   message="Heard both notes?";console.log("Played pair",question);
+ }catch(error){message="Audio unavailable: retry";report(error);}
+ finally{playing=false;if(!stopped)refresh();}
 }
-
-/**
- * Entry point, called at the end of the file: the device runs this script from top to bottom and starts nothing by itself.
- */
-function main(): void {
-  let ticks = 0;
-  let stopped = false;
-
-  const report = (err: unknown) =>
-    console.error(`${APP}: ${err instanceof Error ? err.message : String(err)}`);
-
-  void draw(ticks).catch(report);
-
-  // Tick errors are reported, not thrown: one failed request must not stop the loop.
-  const timer = setInterval(() => {
-    ticks += 1;
-    void draw(ticks).catch(report);
-  }, TICK_MS);
-
-  // Back leaves the app. Once the timer is cleared and the handler detached, nothing keeps it alive and the device takes the screen back.
-  const unbind = listen("input", (event) => {
-    if (stopped || event.key !== "back" || event.action !== "short") return;
-
-    stopped = true;
-    clearInterval(timer);
-
-    // Not detached from inside the handler itself: with nothing else left the unbind stops the app on the spot, while this handler is still running.
-    setTimeout(unbind, 0);
-  });
+function key(k:Key){
+ if(k==="start"){void play();return;}
+ if(!answered&&(k==="up"||k==="down"))choice=wrap(choice+(k==="up"?1:-1),4);
+ if(k==="ok"&&!answered){
+   answered=true;stats.total++;stats.streak=choice===question?stats.streak+1:0;
+   if(choice===question)stats.right++;
+   stats.best=Math.max(stats.best,stats.streak);persist("scores",stats);
+   console.log("graded",choice,question,stats.right,stats.total);
+ }else if(k==="ok"){
+   answered=false;question=wrap(question+1+Math.floor(Math.random()*3),4);choice=0;void play();
+ }
 }
-
-main();
+const refresh=surface(draw,key,()=>{stopped=true;void device.AudioStop().catch(report);});
+void play();
