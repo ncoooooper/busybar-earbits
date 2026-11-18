@@ -38,5 +38,5 @@ function key(k:Key){
    answered=false;question=wrap(question+1+Math.floor(Math.random()*3),4);choice=0;void play();
  }
 }
-const refresh=surface(draw,key,()=>{stopped=true;if(Date.now()<audioEndsAt)void device.AudioStop().catch(report);});
+const refresh=surface(draw,key,()=>{stopped=true;if(Date.now()<audioEndsAt)void device.AudioStop().catch(report);},{enabled:false});
 void play();
