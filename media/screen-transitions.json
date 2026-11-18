@@ -1,0 +1,47 @@
+{
+  "app": "busybar-earbits",
+  "sha256": "aa09e7b4f23f8869d8bb111f6313705ecd6868c122f830f02a966a649a99fa9f",
+  "firmware": "1.3.1",
+  "cell": 16,
+  "lit": 14,
+  "front": [
+    72,
+    16
+  ],
+  "rear": [
+    160,
+    80
+  ],
+  "captures": [
+    {
+      "mode": "classic",
+      "guides": [
+        "replay-and-choose",
+        "grade-the-interval"
+      ],
+      "tour": "screen-transitions",
+      "input": [
+        [
+          "start",
+          "up"
+        ],
+        [
+          "ok"
+        ],
+        [
+          "down",
+          "up",
+          "ok"
+        ]
+      ],
+      "distinct_frames": [
+        5,
+        3,
+        11
+      ],
+      "rear_frames": 4,
+      "rear_tour": "screen-transitions-rear",
+      "exit": "finished"
+    }
+  ]
+}

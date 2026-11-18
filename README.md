@@ -4,6 +4,20 @@ Train your ear on four ascending intervals with original two-note recordings and
 
 Hear a pair of notes before you answer. The front leaves the choice in view while the back keeps your accuracy and best streak. You can replay a pair as often as you need without using up a question.
 
+## Screen transitions
+
+The interval choices stay on screen while you listen. The grading screen takes over when you commit to an answer.
+
+![EarBits front display. The interval choices stay on screen while you listen. The grading screen takes over when you commit to an answer.](media/guide/screen-transitions.gif)
+
+<details>
+
+<summary>Watch the rear display</summary>
+
+![EarBits rear display during the recorded controls](media/guide/screen-transitions-rear.gif)
+
+</details>
+
 ## Listen again before committing
 
 1. Start a question and listen to the two notes in order. The first is your reference.
@@ -34,6 +48,6 @@ Open BUSY Bar Emulator. From this repository, run:
 
 Press **Back** to exit.
 
-The GIFs are excerpts from the emulator recording. The front display is enlarged 9× and the end frames pause for reading.
+The GIFs are excerpts from the emulator recording. Each LED occupies a 16 × 16 cell with a black border. The last frame pauses for reading.
 
 [Full recording](media/controls.mp4) · [Rear display](screenshots/back-1.png) · [Firmware test](EMULATOR-QA.md) · [MIT license](LICENSE)
