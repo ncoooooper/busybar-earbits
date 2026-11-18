@@ -7,10 +7,10 @@ Hear a pair of notes before you answer. The front leaves the choice in view whil
 ## Listen again before committing
 
 1. Start a question and listen to the two notes in order. The first is your reference.
-2. Press **Start** to replay those same two notes. The short waveform on the front marks the replay.
+2. Press **Start** to hear the same two notes again. The current answer stays on screen while you listen.
 3. Turn the wheel to choose Major 3rd, Perfect 4th, Perfect 5th or Octave. Turning changes your answer; only a click grades it.
 
-![The waveform pulses on replay and the wheel changes Major 3rd to Perfect 4th](media/guide/replay-and-choose.gif)
+![The selected interval changes from Major 3rd to Perfect 4th when the wheel turns](media/guide/replay-and-choose.gif)
 
 ## Grade a guess and start another pair
 
