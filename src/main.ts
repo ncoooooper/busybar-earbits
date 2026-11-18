@@ -9,7 +9,7 @@ let audioEndsAt=0;
 let stats=read("scores",{right:0,total:0,streak:0,best:0});
 function draw():Frame{
  const color=answered?(choice===question?mint:amber):"#ABB8FFFF";
- return [rect("line",0,14,Math.round((choice+1)*18),2,color),
+ return [rect("line",0,0,Math.round((choice+1)*18),2,color),
  label("pick",answered?(choice===question?"Correct!":"Hear again"):intervals[choice],1,0,color),
  ...panel("EARBITS",["Identify the interval",answered?"Answer: "+intervals[question]:message,
  "Pick: "+intervals[choice],"Score "+stats.right+"/"+stats.total+"   Best "+stats.best,
