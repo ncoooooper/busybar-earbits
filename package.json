@@ -1,7 +1,7 @@
 {
   "name": "busybar-earbits",
   "private": true,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Train your ear on four ascending intervals with original two-note recordings and a persistent score.",
   "author": "ncoooooper",
   "type": "module",
