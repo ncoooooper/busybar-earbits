@@ -5,6 +5,7 @@ import manifest from "./appmeta/manifest.json";
 const intervals=["Major 3rd","Perfect 4th","Perfect 5th","Octave"];
 let question=Math.floor(Math.random()*4), choice=0, answered=false, playing=false, stopped=false;
 let message="Start: hear the pair";
+let audioEndsAt=0;
 let stats=read("scores",{right:0,total:0,streak:0,best:0});
 function draw():Frame{
  const color=answered?(choice===question?mint:amber):"#ABB8FFFF";
@@ -18,7 +19,9 @@ async function play(){
  if(playing||stopped)return;
  playing=true;
  try{
+   const startedAt=Date.now();
    await device.AudioPlay({application_name:manifest.id,path:"sounds/pair"+question+".snd"});
+   audioEndsAt=startedAt+1000;
    message="Heard both notes?";console.log("Played pair",question);
  }catch(error){message="Audio unavailable: retry";report(error);}
  finally{playing=false;if(!stopped)refresh();}
@@ -35,5 +38,5 @@ function key(k:Key){
    answered=false;question=wrap(question+1+Math.floor(Math.random()*3),4);choice=0;void play();
  }
 }
-const refresh=surface(draw,key,()=>{stopped=true;void device.AudioStop().catch(report);});
+const refresh=surface(draw,key,()=>{stopped=true;if(Date.now()<audioEndsAt)void device.AudioStop().catch(report);});
 void play();
